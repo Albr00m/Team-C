@@ -3,10 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NamePlaceholder</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Restaurant Financial Dashboard</title>
+    <!-- 1. Load Tailwind CSS for styling the container -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 2. Load Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+        /* Apply flex to the body for the side-by-side layout */
+body { 
+    font-family: 'Inter', sans-serif;
+    display: flex; /* Enable flexbox for sidebar/content layout */
+    min-height: 100vh;
+    background-color: #336598; /* bg-gray-50 */
+}
+
+/* Adjust main container padding to not interfere with the sticky sidebar padding */
+.main-content {
+    flex-grow: 1; /* Take up remaining space */
+    max-width: calc(100% - 14rem); /* 14rem is w-56, adjust for padding */
+    padding: 1.5rem; /* p-6 */
+}
+    </style>
 </head>
-<body>
+<body class="bg-gray-50 min-h-screen p-4 sm:p-6">
+        <!-- 1. SIDEBAR NAVIGATION -->
+    <nav class="w-56 bg-gray-900 text-white flex flex-col p-4 rounded-r-2xl shadow-xl h-full sticky top-0">
+        <!-- Logo/Title -->
+        <div class="text-2xl font-extrabold text-green-400 mb-8 p-2">
+            *Restaurant Name*
+        </div>
+        <!-- Navigation Links -->
+        <ul class="space-y-2">
+            <li>
+                <a href="index.html" class="flex items-center p-3 text-green-400 bg-gray-800 rounded-lg font-semibold shadow-md transition duration-150 ease-in-out">
+                    <!-- Icon for Overview/Dashboard (currently selected) -->
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h2m-2-10h10a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v6m0 0h18"></path></svg>
+                    Overview
+                </a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center p-3 text-gray-300 hover:bg-gray-700 rounded-lg transition duration-150 ease-in-out">
+                    <!-- Icon for Orders -->
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2m-9 0V3h4v2m-4 0h4m-4 0h4"></path></svg>
+                    Orders
+                </a>
+            </li>
+            <li>
+                <a href="analysis.html" class="flex items-center p-3 text-gray-300 hover:bg-gray-700 rounded-lg transition duration-150 ease-in-out">
+                    <!-- Icon for Analysis -->
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+                    Analysis
+                </a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center p-3 text-gray-300 hover:bg-gray-700 rounded-lg transition duration-150 ease-in-out">
+                    <!-- Icon for Employees -->
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2v13M18 10a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    Employees
+                </a>
+            </li>
+        </nav>
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-8">
+            <h1 class="text-3xl font-extrabold text-gray-900">Restaurant Performance Overview</h1>
+            <p class="text-gray-500 mt-1">Key metrics and weekly trends for October 2025</p>
+        </header>
+
+        <!-- KPI Cards (Top Half) -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <!-- Card 1: Daily Revenue -->
+            <div class="bg-white p-4 rounded-xl shadow-md border-b-4 border-green-500">
+                <p class="text-sm font-medium text-gray-500">Today's Revenue</p>
+                <p id="kpi-daily-revenue" class="text-2xl font-bold text-gray-900 mt-1">...</p>
+            </div>
+            <!-- Card 2: Daily Expenses -->
+            <div class="bg-white p-4 rounded-xl shadow-md border-b-4 border-red-500">
+                <p class="text-sm font-medium text-gray-500">Today's Expenses</p>
+                <p id="kpi-daily-expenses" class="text-2xl font-bold text-gray-900 mt-1">...</p>
+            </div>
+            <!-- Card 3: Yearly Revenue -->
+            <div class="bg-white p-4 rounded-xl shadow-md border-b-4 border-indigo-500">
+                <p class="text-sm font-medium text-gray-500">YTD Revenue</p>
+                <p id="kpi-yearly-revenue" class="text-2xl font-bold text-gray-900 mt-1">...</p>
+            </div>
+            <!-- Card 4: Yearly Expenses -->
+            <div class="bg-white p-4 rounded-xl shadow-md border-b-4 border-yellow-500">
+                <p class="text-sm font-medium text-gray-500">YTD Expenses</p>
+                <p id="kpi-yearly-expenses" class="text-2xl font-bold text-gray-900 mt-1">...</p>
+            </div>
+        </div>
+
+        <!-- Chart Container (Bottom Half) -->
+        <div class="bg-white p-6 rounded-xl shadow-lg">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Weekly Revenue vs. Expenses</h2>
+            <!-- The Canvas Element for the combined bar chart -->
+            <div class="h-96">
+                <canvas id="weeklySummaryChart"></canvas>
+            </div>
+        </div>
+    </div>
+
     <script src="index.js"></script>
 </body>
 </html>

@@ -1,0 +1,14 @@
+/* Apply flex to the body for the side-by-side layout */
+body { 
+    font-family: 'Inter', sans-serif;
+    display: flex; /* Enable flexbox for sidebar/content layout */
+    min-height: 100vh;
+    background-color: #f9fafb; /* bg-gray-50 */
+}
+
+/* Adjust main container padding to not interfere with the sticky sidebar padding */
+.main-content {
+    flex-grow: 1; /* Take up remaining space */
+    max-width: calc(100% - 14rem); /* 14rem is w-56, adjust for padding */
+    padding: 1.5rem; /* p-6 */
+}
