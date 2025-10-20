@@ -1,0 +1,51 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+body{
+background-color: black;
+}
+
+
+.logo{
+    color: white;
+    font-style: italic;
+    text-align:left;color:orange;
+}
+.logo button{
+    background-color:orange;
+    float: right;
+    height: 30px;
+    width: 110px;
+    border: none;
+    margin-right: 30px;
+}
+
+ .nav{
+    list-style: none;
+    justify-content: space-between; 
+    float: right;
+   
+}
+ li{
+    display: inline-block;
+    text-decoration: none;
+    padding-right: 10px;
+    color: aliceblue;
+    margin-top: none;
+ }
+li a{
+    color: aliceblue;
+      display: inline-block;
+    background-color: rgb(7, 4, 1);
+    border-radius:10px ;
+    color: #f0e8e8;
+    font-size:15px ; 
+    text-decoration:none ;
+}
+
+.nav a:hover{
+color: orange;
+}
+
